@@ -3,6 +3,7 @@
   import { Button } from "$lib/components/ui/button";
   import { ScrollArea } from "$lib/components/ui/scroll-area";
   import { Card, CardContent, CardFooter, CardTitle } from "$lib/components/ui/card";
+  import { ChevronRight } from "lucide-svelte";
 
   let vendorName = "";
   let vendorAge = 18;
@@ -30,6 +31,30 @@
   let twitterLink = "";
   let websiteLink = "";
   let isValidEmail = false;
+
+  $: isDisabled =
+    !vendorName ||
+    vendorAge < 18 ||
+    selectedCategories.length < 1 ||
+    !acknowledge ||
+    weekdays.length === 0 ||
+    !description ||
+    !address ||
+    !phone ||
+    !email ||
+    !opensAt ||
+    !closesAt ||
+    description.length < 10;
+
+  function handleClick(event: MouseEvent) {
+    if (isDisabled) {
+      event.preventDefault(); // Prevent navigation if the button is disabled
+      alert("Please fill out all required fields to proceed.");
+    } else {
+      console.log("Proceeding to ./market");
+      // Navigation will happen automatically due to the href if not disabled
+    }
+  }
 
   const validateEmail = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -492,17 +517,7 @@
           <Button
             type="submit"
             class="col-span-2 w-full rounded-lg bg-green-600 py-3 font-medium text-white hover:bg-green-700"
-            disabled={!vendorName ||
-              vendorAge < 18 ||
-              selectedCategories.length < 1 ||
-              !acknowledge ||
-              weekdays.length === 0 ||
-              !description ||
-              !address ||
-              !phone ||
-              !email ||
-              !opensAt ||
-              !closesAt}
+            disabled={isDisabled}
           >
             Submit
           </Button>
