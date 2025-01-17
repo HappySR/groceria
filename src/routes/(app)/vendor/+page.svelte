@@ -17,6 +17,7 @@
   let productNameError = "";
   let productCategoryError = "";
   let productPriceError = "";
+  let dropdownOpen = false;
 
   const categories = [
     "All Products",
@@ -61,8 +62,16 @@
     }
   };
 
-  const submitForm = () => {
+  function toggleDropdown() {
+    dropdownOpen = !dropdownOpen;
+  }
+
+  const submitForm = (event: SubmitEvent) => {
     isSubmitted = true;
+    // Prevent the default form submission behavior
+    event.preventDefault();
+    // Handle form submission logic here
+    console.log("Form submitted", { vendorName, vendorAge, selectedCategories, acknowledge });
   };
 
   const validateProductForm = (): boolean => {
@@ -105,10 +114,7 @@
     <div class="rounded-lg bg-white p-8 shadow-lg">
       <!-- Vendor Form -->
       {#if !isSubmitted}
-        <form
-          on:submit|preventDefault={submitForm}
-          class="grid grid-cols-1 gap-6 md:grid-cols-2"
-        >
+        <form onsubmit={submitForm} class="grid grid-cols-1 gap-6 md:grid-cols-2">
           <!-- Vendor Name -->
           <div>
             <label for="vendorName" class="block text-lg font-medium text-gray-700">
@@ -146,24 +152,70 @@
             <label for="categories" class="block text-lg font-medium text-gray-700">
               Select Categories
             </label>
-            <div class="grid grid-cols-2 gap-4 mt-2 md:grid-cols-3">
-              {#each categories as category}
-                <div class="flex items-center">
-                  <input
-                    type="checkbox"
-                    id={category}
-                    value={category}
-                    checked={selectedCategories.includes(category)}
-                    class="h-5 w-5 rounded border-gray-300 text-green-600"
-                    on:change={() => handleCategoryChange(category)}
-                  />
-                  <label for={category} class="ml-2 text-sm text-gray-600">{category}</label>
+            <div class="relative mt-4 w-full md:w-1/2">
+              <!-- Dropdown Trigger -->
+              <div
+                class="cursor-pointer rounded border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-sm focus-within:ring-2 focus-within:ring-green-500"
+                onclick={toggleDropdown}
+                role="button"
+                aria-pressed={dropdownOpen ? "true" : "false"}
+                tabindex="0"
+                onkeydown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    toggleDropdown();
+                  }
+                }}
+              >
+                <div class="flex items-center justify-between">
+                  <div>
+                    {#if selectedCategories.length > 0}
+                      {selectedCategories
+                        .filter((category) => category !== "All Products")
+                        .join(", ")}
+                    {:else}
+                      Select Categories...
+                    {/if}
+                  </div>
+                  <!-- Down Arrow (Toggle Icon) -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4 transition-transform duration-200"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    class:rotate-180={dropdownOpen}
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
                 </div>
-              {/each}
+              </div>
+
+              <!-- Dropdown Menu -->
+              {#if dropdownOpen}
+                <div
+                  class="absolute left-0 z-50 mt-2 max-h-56 w-full overflow-auto rounded border border-gray-300 bg-white shadow-lg"
+                >
+                  <div class="grid grid-cols-1 gap-2 p-4">
+                    {#each categories as category}
+                      <div class="flex items-center">
+                        <input
+                          type="checkbox"
+                          id={category}
+                          value={category}
+                          checked={selectedCategories.includes(category)}
+                          class="h-5 w-5 rounded border-gray-300 text-green-600"
+                          onchange={() => handleCategoryChange(category)}
+                        />
+                        <label for={category} class="ml-2 text-sm text-gray-600">{category}</label>
+                      </div>
+                    {/each}
+                  </div>
+                </div>
+              {/if}
             </div>
-            {#if selectedCategories.length < 1}
-              <span class="text-sm text-red-500">You must select at least one category.</span>
-            {/if}
           </div>
 
           <!-- Acknowledge Checkbox -->
@@ -185,7 +237,10 @@
           <Button
             type="submit"
             class="col-span-2 w-full rounded-lg bg-green-600 py-3 font-medium text-white hover:bg-green-700"
-            disabled={!vendorName || vendorAge < 18 || selectedCategories.length < 1 || !acknowledge}
+            disabled={!vendorName ||
+              vendorAge < 18 ||
+              selectedCategories.length < 1 ||
+              !acknowledge}
           >
             Submit
           </Button>
@@ -198,7 +253,9 @@
           <!-- Add New Product -->
           <div>
             <Card class="shadow-md">
-              <CardTitle class="text-xl pt-4 pl-5 font-semibold text-gray-800">Add New Product</CardTitle>
+              <CardTitle class="pl-5 pt-4 text-xl font-semibold text-gray-800"
+                >Add New Product</CardTitle
+              >
               <CardContent>
                 <div class="space-y-4">
                   <!-- Product Name -->
