@@ -159,11 +159,13 @@
 <div class="container mx-auto max-w-7xl px-4 pt-8">
   <!-- Header -->
   <div class="flex flex-col items-start space-y-4">
-    <h1 class="text-3xl font-extrabold text-green-600 md:text-5xl leading-tight pb-4">groceria.</h1>
-    <p class="text-xl text-gray-600 max-w-full mt-4 mb-8 px-4 py-2 rounded-lg shadow-md bg-gray-50">
-      Welcome to groceria! Please fill out the form below to register your vendor details. This information will help us serve you better.
-    </p>    
-    <div class="w-full border-b-2 border-gray-300"></div> <!-- Subtle line divider -->
+    <h1 class="pb-4 text-3xl font-extrabold leading-tight text-green-600 md:text-5xl">groceria.</h1>
+    <p class="mb-8 mt-4 max-w-full rounded-lg bg-gray-50 px-4 py-2 text-xl text-gray-600 shadow-md">
+      Welcome to groceria! Please fill out the form below to register your vendor details. This
+      information will help us serve you better.
+    </p>
+    <div class="w-full border-b-2 border-gray-300"></div>
+    <!-- Subtle line divider -->
   </div>
 </div>
 

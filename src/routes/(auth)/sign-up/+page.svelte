@@ -16,7 +16,7 @@
 </script>
 
 <svelte:head>
-  <title>Sign Up | groceria</title>
+  <title>Sign Up | groceria.</title>
 </svelte:head>
 
 <Card.Root class="mx-auto max-w-sm shadow-lg">
@@ -29,7 +29,7 @@
       <form class="grid gap-4" method="POST" action="?/sign-up" use:enhance>
         <div class="grid gap-2">
           <Label for="username">Username</Label>
-          <Input id="username" type="text" name="username" placeholder="Jane Doe" required />
+          <Input id="username" type="text" name="username" placeholder="jane-doe" required />
         </div>
         <div class="grid gap-2">
           <Label for="email">Email</Label>
