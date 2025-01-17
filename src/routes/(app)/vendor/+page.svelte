@@ -3,7 +3,6 @@
   import { Button } from "$lib/components/ui/button";
   import { ScrollArea } from "$lib/components/ui/scroll-area";
   import { Card, CardContent, CardFooter, CardTitle } from "$lib/components/ui/card";
-  import { Search } from "lucide-svelte";
 
   let vendorName = "";
   let vendorAge = 18;
@@ -17,7 +16,8 @@
   let productNameError = "";
   let productCategoryError = "";
   let productPriceError = "";
-  let dropdownOpen = false;
+  let dropdownOpenCategories = false;
+  let dropdownOpenDays = false;
   let description = "";
   let address = "";
   let phone = "";
@@ -97,8 +97,12 @@
     }
   };
 
-  function toggleDropdown() {
-    dropdownOpen = !dropdownOpen;
+  function toggleDropdownCategories() {
+    dropdownOpenCategories = !dropdownOpenCategories;
+  }
+
+  function toggleDropdownDays() {
+    dropdownOpenDays = !dropdownOpenDays;
   }
 
   const submitForm = (event: SubmitEvent) => {
@@ -152,15 +156,19 @@
   };
 </script>
 
-<div class="container mx-auto max-w-7xl px-4 pt-4">
+<div class="container mx-auto max-w-7xl px-4 pt-8">
   <!-- Header -->
-  <div class="flex flex-col items-start">
-    <h1 class="text-3xl font-bold text-primary md:text-5xl">groceria.</h1>
+  <div class="flex flex-col items-start space-y-4">
+    <h1 class="text-3xl font-extrabold text-green-600 md:text-5xl leading-tight pb-4">groceria.</h1>
+    <p class="text-xl text-gray-600 max-w-full mt-4 mb-8 px-4 py-2 rounded-lg shadow-md bg-gray-50">
+      Welcome to groceria! Please fill out the form below to register your vendor details. This information will help us serve you better.
+    </p>    
+    <div class="w-full border-b-2 border-gray-300"></div> <!-- Subtle line divider -->
   </div>
 </div>
 
 <!-- Main Content -->
-<ScrollArea class="h-[calc(100vh-4rem)] overflow-hidden py-8">
+<ScrollArea class="h-[calc(100vh-4rem)] overflow-hidden py-5">
   <div class="mx-auto max-w-7xl">
     <div class="rounded-lg bg-white p-8 shadow-lg">
       <!-- Vendor Form -->
@@ -207,13 +215,13 @@
               <!-- Dropdown Trigger -->
               <div
                 class="cursor-pointer rounded border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-sm focus-within:ring-2 focus-within:ring-green-500"
-                onclick={toggleDropdown}
+                onclick={toggleDropdownCategories}
                 role="button"
-                aria-pressed={dropdownOpen ? "true" : "false"}
+                aria-pressed={dropdownOpenCategories ? "true" : "false"}
                 tabindex="0"
                 onkeydown={(event) => {
                   if (event.key === "Enter" || event.key === " ") {
-                    toggleDropdown();
+                    toggleDropdownCategories();
                   }
                 }}
               >
@@ -233,7 +241,7 @@
                     class="h-4 w-4 transition-transform duration-200"
                     viewBox="0 0 20 20"
                     fill="currentColor"
-                    class:rotate-180={dropdownOpen}
+                    class:rotate-180={dropdownOpenCategories}
                   >
                     <path
                       fill-rule="evenodd"
@@ -245,7 +253,7 @@
               </div>
 
               <!-- Dropdown Menu -->
-              {#if dropdownOpen}
+              {#if dropdownOpenCategories}
                 <div
                   class="absolute left-0 z-50 mt-2 max-h-56 w-full overflow-auto rounded border border-gray-300 bg-white shadow-lg"
                 >
@@ -371,13 +379,13 @@
               <!-- Dropdown Trigger -->
               <div
                 class="cursor-pointer rounded border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-sm focus-within:ring-2 focus-within:ring-green-500"
-                onclick={toggleDropdown}
+                onclick={toggleDropdownDays}
                 role="button"
-                aria-pressed={dropdownOpen ? "true" : "false"}
+                aria-pressed={dropdownOpenDays ? "true" : "false"}
                 tabindex="0"
                 onkeydown={(event) => {
                   if (event.key === "Enter" || event.key === " ") {
-                    toggleDropdown();
+                    toggleDropdownDays();
                   }
                 }}
               >
@@ -394,7 +402,7 @@
                     class="h-4 w-4 transition-transform duration-200"
                     viewBox="0 0 20 20"
                     fill="currentColor"
-                    class:rotate-180={dropdownOpen}
+                    class:rotate-180={dropdownOpenDays}
                   >
                     <path
                       fill-rule="evenodd"
@@ -406,7 +414,7 @@
               </div>
 
               <!-- Dropdown Menu -->
-              {#if dropdownOpen}
+              {#if dropdownOpenDays}
                 <div
                   class="absolute left-0 mt-2 max-h-56 w-full overflow-auto rounded border border-gray-300 bg-white shadow-lg"
                 >
