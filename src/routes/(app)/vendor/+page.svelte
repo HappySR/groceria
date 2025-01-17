@@ -3,6 +3,7 @@
   import { Button } from "$lib/components/ui/button";
   import { ScrollArea } from "$lib/components/ui/scroll-area";
   import { Card, CardContent, CardFooter, CardTitle } from "$lib/components/ui/card";
+  import { Search } from "lucide-svelte";
 
   let vendorName = "";
   let vendorAge = 18;
@@ -90,6 +91,18 @@
     }
   };
 </script>
+
+<div class="container mx-auto max-w-7xl p-4">
+  <div
+    class="mb-8 flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0"
+  >
+    <div class="flex flex-col space-y-4 md:flex-row md:items-center md:space-x-12 md:space-y-0">
+      <h1 class="fixed top-0 mt-4 text-3xl font-bold text-primary md:text-5xl bg-white z-10">
+        groceria.
+      </h1>      
+    </div>
+  </div>
+</div>
 
 <ScrollArea class="h-[calc(100vh-4rem)] overflow-auto py-8">
   <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
