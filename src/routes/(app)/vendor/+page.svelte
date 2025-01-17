@@ -18,6 +18,23 @@
   let productCategoryError = "";
   let productPriceError = "";
   let dropdownOpen = false;
+  let description = "";
+  let address = "";
+  let phone = "";
+  let email = "";
+  let opensAt = "";
+  let closesAt = "";
+  let weekdays: string[] = [];
+  let facebookLink = "";
+  let instagramLink = "";
+  let twitterLink = "";
+  let websiteLink = "";
+  let isValidEmail = false;
+
+  const validateEmail = () => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    isValidEmail = emailRegex.test(email);
+  };
 
   const categories = [
     "All Products",
@@ -28,6 +45,24 @@
     "Bakery",
     "Pantry Staples",
   ];
+
+  const weekdaysOptions = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
+
+  const handleWeekdayChange = (day: string) => {
+    if (weekdays.includes(day)) {
+      weekdays = weekdays.filter((d) => d !== day);
+    } else {
+      weekdays = [...weekdays, day];
+    }
+  };
 
   // Function to handle the "All Products" checkbox behavior
   const handleCategoryChange = (category: string) => {
@@ -71,7 +106,23 @@
     // Prevent the default form submission behavior
     event.preventDefault();
     // Handle form submission logic here
-    console.log("Form submitted", { vendorName, vendorAge, selectedCategories, acknowledge });
+    console.log("Form submitted", {
+      vendorName,
+      vendorAge,
+      selectedCategories,
+      acknowledge,
+      description,
+      address,
+      phone,
+      email,
+      opensAt,
+      closesAt,
+      weekdays,
+      facebookLink,
+      instagramLink,
+      twitterLink,
+      websiteLink,
+    });
   };
 
   const validateProductForm = (): boolean => {
@@ -218,6 +269,200 @@
             </div>
           </div>
 
+          <!-- Description -->
+          <div class="col-span-2">
+            <label for="description" class="block text-lg font-medium text-gray-700">
+              Description
+            </label>
+            <textarea
+              id="description"
+              bind:value={description}
+              class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-green-500"
+              placeholder="Enter Description"
+              required
+              minlength="10"
+              maxlength="500"
+            ></textarea>
+            <span class="text-sm text-gray-500"
+              >Min length: 10 characters. Max length: 500 characters.</span
+            >
+          </div>
+
+          <!-- Address -->
+          <div class="col-span-2">
+            <label for="address" class="block text-lg font-medium text-gray-700"> Address </label>
+            <Input
+              id="address"
+              placeholder="Enter Address"
+              bind:value={address}
+              class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-green-500"
+              required
+              maxlength={250}
+            />
+          </div>
+
+          <!-- Phone -->
+          <div class="col-span-2">
+            <label for="phone" class="block text-lg font-medium text-gray-700">Phone</label>
+            <Input
+              id="phone"
+              placeholder="Enter Phone Number (e.g., 1234567890)"
+              bind:value={phone}
+              class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-green-500"
+              required
+              type="number"
+              min="1000000000"
+              title="Please enter a valid phone number (e.g., 1234567890)"
+            />
+            {#if phone && phone.toString().length < 10}
+              <span class="text-sm text-red-500">Phone Number should be at least 10 digits</span>
+            {/if}
+          </div>
+
+          <!-- Email -->
+          <div class="col-span-2">
+            <label for="email" class="block text-lg font-medium text-gray-700"> Email </label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="Enter Email Address"
+              bind:value={email}
+              oninput={validateEmail}
+              class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-green-500"
+              required
+            />
+            {#if email && !isValidEmail}
+              <span class="text-sm text-red-500">Please enter a valid email address</span>
+            {/if}
+          </div>
+
+          <!-- Opens At -->
+          <div class="col-span-2">
+            <label for="opensAt" class="block text-lg font-medium text-gray-700"> Opens At </label>
+            <Input
+              id="opensAt"
+              type="time"
+              bind:value={opensAt}
+              class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+
+          <!-- Closes At -->
+          <div class="col-span-2">
+            <label for="closesAt" class="block text-lg font-medium text-gray-700">
+              Closes At
+            </label>
+            <Input
+              id="closesAt"
+              type="time"
+              bind:value={closesAt}
+              class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+
+          <!-- Weekdays (Dropdown with multi-select checkboxes) -->
+          <div class="col-span-2">
+            <label for="weekdays" class="block text-lg font-medium text-gray-700">
+              Weekdays (Select days when the shop is open)
+            </label>
+            <div class="relative mt-4 w-full md:w-1/2">
+              <!-- Dropdown Trigger -->
+              <div
+                class="cursor-pointer rounded border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-sm focus-within:ring-2 focus-within:ring-green-500"
+                onclick={toggleDropdown}
+                role="button"
+                aria-pressed={dropdownOpen ? "true" : "false"}
+                tabindex="0"
+                onkeydown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    toggleDropdown();
+                  }
+                }}
+              >
+                <div class="flex items-center justify-between">
+                  <div>
+                    {#if weekdays.length > 0}
+                      {weekdays.join(", ")}
+                    {:else}
+                      Select Weekdays...
+                    {/if}
+                  </div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4 transition-transform duration-200"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    class:rotate-180={dropdownOpen}
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Dropdown Menu -->
+              {#if dropdownOpen}
+                <div
+                  class="absolute left-0 mt-2 max-h-56 w-full overflow-auto rounded border border-gray-300 bg-white shadow-lg"
+                >
+                  <div class="grid grid-cols-1 gap-2 p-4">
+                    {#each weekdaysOptions as day}
+                      <div class="flex items-center">
+                        <input
+                          type="checkbox"
+                          id={day}
+                          value={day}
+                          checked={weekdays.includes(day)}
+                          class="h-5 w-5 rounded border-gray-300 text-green-600"
+                          onchange={() => handleWeekdayChange(day)}
+                        />
+                        <label for={day} class="ml-2 text-sm text-gray-600">{day}</label>
+                      </div>
+                    {/each}
+                  </div>
+                </div>
+              {/if}
+            </div>
+          </div>
+
+          <!-- Social Media Links (Optional) -->
+          <div class="col-span-2">
+            <label for="socialMedia" class="block text-lg font-medium text-gray-700">
+              Social Media Links (Optional)
+            </label>
+            <div class="space-y-4">
+              <Input
+                id="facebookLink"
+                placeholder="Facebook Link"
+                bind:value={facebookLink}
+                class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-green-500"
+              />
+              <Input
+                id="instagramLink"
+                placeholder="Instagram Link"
+                bind:value={instagramLink}
+                class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-green-500"
+              />
+              <Input
+                id="twitterLink"
+                placeholder="Twitter Link"
+                bind:value={twitterLink}
+                class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-green-500"
+              />
+              <Input
+                id="websiteLink"
+                placeholder="Website Link"
+                bind:value={websiteLink}
+                class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-green-500"
+              />
+            </div>
+          </div>
+
           <!-- Acknowledge Checkbox -->
           <div class="col-span-2">
             <div class="flex items-center">
@@ -240,7 +485,14 @@
             disabled={!vendorName ||
               vendorAge < 18 ||
               selectedCategories.length < 1 ||
-              !acknowledge}
+              !acknowledge ||
+              weekdays.length === 0 ||
+              !description ||
+              !address ||
+              !phone ||
+              !email ||
+              !opensAt ||
+              !closesAt}
           >
             Submit
           </Button>
