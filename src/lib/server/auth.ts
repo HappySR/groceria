@@ -7,7 +7,7 @@ import { encodeBase64url, encodeHexLowerCase } from "@oslojs/encoding";
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24;
 
-export const sessionCookieName = "auth-session";
+export const sessionCookieName = "groceria-session";
 
 export function generateSessionToken() {
   const bytes = crypto.getRandomValues(new Uint8Array(18));
@@ -17,10 +17,12 @@ export function generateSessionToken() {
 
 export async function createSession(token: string, userId: string) {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+  const now = Date.now();
   const session: table.Session = {
     id: sessionId,
     userId,
-    expiresAt: new Date(Date.now() + DAY_IN_MS * 30),
+    createdAt: new Date(now),
+    expiresAt: new Date(now + DAY_IN_MS * 30),
   };
   await db.insert(table.session).values(session);
   return session;
@@ -30,7 +32,7 @@ export async function validateSessionToken(token: string) {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
   const [result] = await db
     .select({
-      user: { id: table.user.id, username: table.user.username },
+      user: { id: table.user.id, username: table.user.username, email: table.user.email },
       session: table.session,
     })
     .from(table.session)
