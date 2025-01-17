@@ -185,19 +185,6 @@
   <!-- Header -->
   <div class="flex flex-col items-start space-y-4">
     <h1 class="pb-4 text-3xl font-extrabold leading-tight text-green-600 md:text-5xl">groceria.</h1>
-    <a
-      href="./market"
-      onclick={handleClick}
-      class="fixed right-4 top-4 flex items-center justify-center space-x-2 rounded-lg px-6 py-3 text-lg font-semibold text-green-600 shadow-md transition duration-200 focus:outline-none
-  {isDisabled
-        ? 'cursor-not-allowed opacity-50'
-        : 'hover:text-green-700 focus:ring-2 focus:ring-green-400'}"
-      aria-disabled={isDisabled}
-      title="Skip directly to vendor dashboard"
-    >
-      <ChevronRight class="h-5 w-5" />
-    </a>
-
     <p class="mb-8 mt-4 max-w-full rounded-lg bg-gray-50 px-4 py-2 text-xl text-gray-600 shadow-md">
       Welcome to groceria! Please fill out the form below to register your vendor details. This
       information will help us serve you better.
