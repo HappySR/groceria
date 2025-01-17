@@ -152,9 +152,9 @@
   };
 </script>
 
-<div class="container mx-auto max-w-7xl px-4 py-4">
+<div class="container mx-auto max-w-7xl px-4 pt-4">
   <!-- Header -->
-  <div class="mb-8 flex items-center justify-between">
+  <div class="flex flex-col items-start">
     <h1 class="text-3xl font-bold text-primary md:text-5xl">groceria.</h1>
   </div>
 </div>
