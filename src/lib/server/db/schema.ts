@@ -6,50 +6,19 @@ import {
   uniqueIndex,
   index,
   time,
-  text,
   pgEnum,
   jsonb,
+  decimal,
 } from "drizzle-orm/pg-core";
 
-export const admin = pgTable("admin", {
-  id: varchar("id", { length: 64 }).primaryKey(),
-  email: varchar("email", { length: 254 }).notNull(),
-  passwordHash: varchar("password_hash", { length: 98 }).notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
-});
-
-export const adminRelations = relations(admin, ({ many }) => ({
-  categories: many(category),
-}));
-
-export const category = pgTable(
-  "category",
-  {
-    id: varchar("id", { length: 64 }).primaryKey(),
-    adminId: varchar("admin_id", { length: 64 })
-      .notNull()
-      .references(() => admin.id, {
-        onDelete: "cascade",
-      }),
-    name: varchar("name", { length: 64 }).notNull(),
-    description: text("description").notNull(),
-    properties: jsonb("properties").notNull().$type<{ [key: string]: string }>(),
-    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
-  },
-  (table) => [uniqueIndex("idx_category_name").on(table.name)],
-);
-
-export const categoryRelations = relations(category, ({ one, many }) => ({
-  admin: one(admin, { fields: [category.adminId], references: [admin.id] }),
-  items: many(item),
-}));
-
+export const role = pgEnum("role", ["admin", "vendor", "user"]);
 export const user = pgTable(
   "user",
   {
     id: varchar("id", { length: 64 }).primaryKey(),
     email: varchar("email", { length: 254 }).notNull(),
     username: varchar("username", { length: 32 }).notNull(),
+    role: role("role").notNull().default("user"),
     passwordHash: varchar("password_hash", { length: 98 }).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
   },
@@ -61,6 +30,7 @@ export const user = pgTable(
 
 export const userRelations = relations(user, ({ many, one }) => ({
   sessions: many(session),
+  categories: many(category),
   vendor: one(vendor, { fields: [user.id], references: [vendor.userId] }),
 }));
 
@@ -81,6 +51,28 @@ export const sessionRelations = relations(session, ({ one }) => ({
   user: one(user, { fields: [session.userId], references: [user.id] }),
 }));
 
+export const category = pgTable(
+  "category",
+  {
+    id: varchar("id", { length: 64 }).primaryKey(),
+    userId: varchar("user_id", { length: 64 })
+      .notNull()
+      .references(() => user.id, {
+        onDelete: "cascade",
+      }),
+    name: varchar("name", { length: 64 }).notNull(),
+    description: varchar("description", { length: 1000 }).notNull(),
+    properties: jsonb("properties").notNull().$type<{ [key: string]: string }>(),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+  },
+  (table) => [uniqueIndex("idx_category_name").on(table.name)],
+);
+
+export const categoryRelations = relations(category, ({ one, many }) => ({
+  user: one(user, { fields: [category.userId], references: [user.id] }),
+  items: many(item),
+}));
+
 export const weekday = pgEnum("weekday", ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]);
 export const vendor = pgTable(
   "vendor",
@@ -93,12 +85,10 @@ export const vendor = pgTable(
     openAt: time("start_at", { withTimezone: true }).notNull(),
     closeAt: time("close_at", { withTimezone: true }).notNull(),
     days: weekday("weekday").array().notNull(),
-    description: text("description").notNull(),
-    address: text("address").notNull(),
+    description: varchar("description", { length: 1000 }).notNull(),
+    address: varchar("address", { length: 256 }).notNull(),
     phone: varchar("phone", { length: 20 }).notNull(),
-    email: varchar("email", { length: 254 })
-      .notNull()
-      .references(() => user.email, { onDelete: "cascade" }),
+    email: varchar("email", { length: 254 }).notNull(),
     socialMedia: jsonb("social_media").notNull().$type<{ [key: string]: string }>(),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
   },
@@ -130,8 +120,8 @@ export const item = pgTable(
       .notNull()
       .references(() => category.id, { onDelete: "cascade" }),
     name: varchar("name", { length: 64 }).notNull(),
-    description: text("description").notNull(),
-    price: varchar("price", { length: 10 }).notNull(),
+    description: varchar("description", { length: 1000 }).notNull(),
+    price: decimal("price").notNull(),
     properties: jsonb("properties").notNull().$type<{ [key: string]: string }>(),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
   },
@@ -148,7 +138,7 @@ export const itemRelations = relations(item, ({ one }) => ({
 }));
 
 export type User = typeof user.$inferSelect;
-export type Admin = typeof admin.$inferSelect;
+export type Item = typeof item.$inferSelect;
 export type Vendor = typeof vendor.$inferSelect;
 export type Session = typeof session.$inferSelect;
 export type Category = typeof category.$inferSelect;
