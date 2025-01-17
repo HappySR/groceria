@@ -92,60 +92,61 @@
   };
 </script>
 
-<div class="container mx-auto max-w-7xl p-4">
-  <div
-    class="mb-8 flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0"
-  >
-    <div class="flex flex-col space-y-4 md:flex-row md:items-center md:space-x-12 md:space-y-0">
-      <h1 class="fixed top-0 mt-4 text-3xl font-bold text-primary md:text-5xl bg-white z-10">
-        groceria.
-      </h1>      
-    </div>
+<div class="container mx-auto max-w-7xl px-4 py-4">
+  <!-- Header -->
+  <div class="mb-8 flex items-center justify-between">
+    <h1 class="text-3xl font-bold text-primary md:text-5xl">groceria.</h1>
   </div>
 </div>
 
-<ScrollArea class="h-[calc(100vh-4rem)] overflow-auto py-8">
-  <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+<!-- Main Content -->
+<ScrollArea class="h-[calc(100vh-4rem)] overflow-hidden py-8">
+  <div class="mx-auto max-w-7xl">
     <div class="rounded-lg bg-white p-8 shadow-lg">
+      <!-- Vendor Form -->
       {#if !isSubmitted}
-        <form on:submit|preventDefault={submitForm} class="space-y-6">
+        <form
+          on:submit|preventDefault={submitForm}
+          class="grid grid-cols-1 gap-6 md:grid-cols-2"
+        >
           <!-- Vendor Name -->
           <div>
-            <label for="vendorName" class="block text-lg font-medium text-gray-700"
-              >Vendor Name</label
-            >
+            <label for="vendorName" class="block text-lg font-medium text-gray-700">
+              Vendor Name
+            </label>
             <Input
               id="vendorName"
               placeholder="Enter Vendor Name"
               bind:value={vendorName}
-              class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+              class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-green-500"
               required
             />
           </div>
 
           <!-- Vendor Age -->
           <div>
-            <label for="vendorAge" class="block text-lg font-medium text-gray-700">Vendor Age</label
-            >
+            <label for="vendorAge" class="block text-lg font-medium text-gray-700">
+              Vendor Age
+            </label>
             <Input
               id="vendorAge"
               type="number"
               bind:value={vendorAge}
-              class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+              class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-green-500"
               min="18"
               required
             />
             {#if vendorAge < 18}
-              <span class="mt-1 text-sm text-red-500">You must be 18 or older to proceed.</span>
+              <span class="text-sm text-red-500">You must be 18 or older to proceed.</span>
             {/if}
           </div>
 
-          <!-- Select Categories (Using Checkboxes) -->
-          <div>
-            <label for="categories" class="block text-lg font-medium text-gray-700"
-              >Select Categories</label
-            >
-            <div class="space-y-2">
+          <!-- Select Categories -->
+          <div class="col-span-2">
+            <label for="categories" class="block text-lg font-medium text-gray-700">
+              Select Categories
+            </label>
+            <div class="grid grid-cols-2 gap-4 mt-2 md:grid-cols-3">
               {#each categories as category}
                 <div class="flex items-center">
                   <input
@@ -161,15 +162,12 @@
               {/each}
             </div>
             {#if selectedCategories.length < 1}
-              <span class="mt-1 text-sm text-red-500">You must select at least one category.</span>
+              <span class="text-sm text-red-500">You must select at least one category.</span>
             {/if}
           </div>
 
           <!-- Acknowledge Checkbox -->
-          <div>
-            <label for="acknowledge" class="block text-lg font-medium text-gray-700"
-              >Acknowledge</label
-            >
+          <div class="col-span-2">
             <div class="flex items-center">
               <input
                 id="acknowledge"
@@ -177,87 +175,88 @@
                 bind:checked={acknowledge}
                 class="form-checkbox h-5 w-5 rounded border-gray-300 text-green-600"
               />
-              <label for="acknowledge" class="ml-2 text-sm text-gray-600"
-                >I acknowledge that all details provided are true to the best of my knowledge.</label
-              >
+              <label for="acknowledge" class="ml-2 text-sm text-gray-600">
+                I acknowledge that all details provided are true to the best of my knowledge.
+              </label>
             </div>
           </div>
 
           <!-- Submit Button -->
           <Button
             type="submit"
-            class="w-full rounded-lg bg-green-600 py-3 font-medium text-white transition duration-300 hover:bg-green-700"
-            disabled={!vendorName ||
-              vendorAge < 18 ||
-              selectedCategories.length < 1 ||
-              !acknowledge}
+            class="col-span-2 w-full rounded-lg bg-green-600 py-3 font-medium text-white hover:bg-green-700"
+            disabled={!vendorName || vendorAge < 18 || selectedCategories.length < 1 || !acknowledge}
           >
             Submit
           </Button>
         </form>
       {/if}
 
-      <!-- Add Product Section: Visible after form submission -->
+      <!-- Add Product and Added Products Section -->
       {#if isSubmitted}
-        <div class="mx-auto mt-8 max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div class="rounded-lg bg-white p-8 shadow-lg">
-            <h2 class="text-2xl font-semibold text-gray-800">Add New Product</h2>
-            <Card class="mt-6 shadow-md">
-              <CardTitle>Add Product Details</CardTitle>
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+          <!-- Add New Product -->
+          <div>
+            <Card class="shadow-md">
+              <CardTitle class="text-xl pt-4 pl-5 font-semibold text-gray-800">Add New Product</CardTitle>
               <CardContent>
                 <div class="space-y-4">
+                  <!-- Product Name -->
                   <div>
-                    <label for="productName" class="block text-sm font-medium text-gray-700"
-                      >Product Name</label
-                    >
+                    <label for="productName" class="block text-sm font-medium text-gray-700">
+                      Product Name
+                    </label>
                     <Input
                       id="productName"
                       bind:value={productName}
-                      class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+                      class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-green-500"
                       placeholder="Enter Product Name"
                     />
                     {#if productNameError}
-                      <span class="mt-1 text-sm text-red-500">{productNameError}</span>
+                      <span class="text-sm text-red-500">{productNameError}</span>
                     {/if}
                   </div>
+
+                  <!-- Product Category -->
                   <div>
-                    <label for="productCategory" class="block text-sm font-medium text-gray-700"
-                      >Category</label
-                    >
+                    <label for="productCategory" class="block text-sm font-medium text-gray-700">
+                      Category
+                    </label>
                     <select
                       id="productCategory"
                       bind:value={productCategory}
-                      class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+                      class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-green-500"
                     >
                       {#each selectedCategories.filter((category) => category !== "All Products") as category}
                         <option value={category}>{category}</option>
                       {/each}
                     </select>
-
                     {#if productCategoryError}
-                      <span class="mt-1 text-sm text-red-500">{productCategoryError}</span>
+                      <span class="text-sm text-red-500">{productCategoryError}</span>
                     {/if}
                   </div>
+
+                  <!-- Product Price -->
                   <div>
-                    <label for="productPrice" class="block text-sm font-medium text-gray-700"
-                      >Price</label
-                    >
+                    <label for="productPrice" class="block text-sm font-medium text-gray-700">
+                      Price
+                    </label>
                     <Input
                       id="productPrice"
                       type="number"
                       bind:value={productPrice}
-                      class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+                      class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-green-500"
                       placeholder="Enter Price"
                     />
                     {#if productPriceError}
-                      <span class="mt-1 text-sm text-red-500">{productPriceError}</span>
+                      <span class="text-sm text-red-500">{productPriceError}</span>
                     {/if}
                   </div>
                 </div>
               </CardContent>
               <CardFooter>
                 <Button
-                  class="w-full rounded-lg bg-green-600 py-3 font-medium text-white transition duration-300 hover:bg-green-700"
+                  class="w-full rounded-lg bg-green-600 py-3 font-medium text-white hover:bg-green-700"
                   onclick={addProduct}
                 >
                   Add Product
@@ -265,20 +264,27 @@
               </CardFooter>
             </Card>
           </div>
-        </div>
 
-        <!-- Display Added Products -->
-        <div class="mx-auto mt-8 max-w-3xl px-4 sm:px-6 lg:px-8">
-          <h3 class="text-xl font-semibold text-gray-800">Added Products</h3>
-          <ul class="mt-4 space-y-4">
-            {#each products as product, i}
-              <li class="border-b pb-4">
-                <div class="font-semibold">{product.name}</div>
-                <div class="text-sm text-gray-600">Category: {product.category}</div>
-                <div class="text-sm text-gray-600">Price: ₹{product.price}</div>
-              </li>
-            {/each}
-          </ul>
+          <!-- Added Products -->
+          <div>
+            <div class="rounded-lg bg-gray-50 p-6 shadow-lg">
+              <h3 class="text-xl font-semibold text-gray-800">Added Products</h3>
+              <ul class="mt-4 space-y-4">
+                {#each products as product, i}
+                  <li class="flex justify-between rounded-lg border p-4 shadow-sm">
+                    <div>
+                      <div class="font-semibold">{product.name}</div>
+                      <div class="text-sm text-gray-600">Category: {product.category}</div>
+                      <div class="text-sm text-gray-600">Price: ₹{product.price}</div>
+                    </div>
+                  </li>
+                {/each}
+              </ul>
+              {#if products.length === 0}
+                <p class="mt-4 text-center text-gray-600">No products added yet.</p>
+              {/if}
+            </div>
+          </div>
         </div>
       {/if}
     </div>
