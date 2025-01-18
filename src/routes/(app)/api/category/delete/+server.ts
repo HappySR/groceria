@@ -8,7 +8,7 @@ const headers = {
   "Content-Type": "application/json",
 };
 const deleteSchema = z.object({
-  ids: z.array(z.string()),
+  ids: z.array(z.string().min(64).max(64)),
 });
 
 export const POST: RequestHandler = async ({ locals, request }) => {
@@ -59,13 +59,13 @@ export const POST: RequestHandler = async ({ locals, request }) => {
     );
   }
 
-  const { ids } = result.data;
-
   let res;
   try {
     res = await db
       .delete(category)
-      .where(and(eq(category.userId, locals.session!.userId), inArray(category.id, ids)))
+      .where(
+        and(eq(category.userId, locals.session!.userId), inArray(category.id, result.data.ids)),
+      )
       .returning();
   } catch (err) {
     console.error(err);
