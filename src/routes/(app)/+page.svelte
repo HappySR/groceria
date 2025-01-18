@@ -70,16 +70,19 @@
       </div>
 
       <!-- Action Buttons -->
-      <div class="flex flex-col justify-center gap-4 sm:flex-row sm:gap-8">
+      <div class="flex flex-col justify-center gap-6 sm:flex-row sm:gap-8">
+        <!-- Sign Up Button -->
         <button
           onclick={() => handleRedirect("./sign-up")}
-          class="transform rounded-full bg-gradient-to-r from-lime-300 to-green-500 px-8 py-4 text-lg font-semibold shadow-xl transition-all hover:scale-110 hover:from-lime-200 hover:to-green-400"
+          class="w-3/4 transform rounded-full bg-gradient-to-r from-lime-300 to-green-500 px-8 py-4 text-lg font-semibold shadow-xl transition-all hover:scale-110 hover:from-lime-200 hover:to-green-400 sm:w-auto"
         >
           Sign Up <ArrowRight class="ml-2 inline-block" />
         </button>
+
+        <!-- Register as Vendor Button -->
         <button
-          onclick={() => handleRedirect("./sign-up")}
-          class="transform rounded-full bg-gradient-to-r from-lime-300 to-green-500 px-8 py-4 text-lg font-semibold shadow-xl transition-all hover:scale-110 hover:from-lime-200 hover:to-green-400"
+          onclick={() => handleRedirect("./vendor/register")}
+          class="mt-4 w-3/4 transform rounded-full bg-gradient-to-r from-lime-300 to-green-500 px-8 py-4 text-lg font-semibold shadow-xl transition-all hover:scale-110 hover:from-lime-200 hover:to-green-400 sm:mt-0 sm:w-auto"
         >
           Register as Vendor <ArrowRight class="ml-2 inline-block" />
         </button>
