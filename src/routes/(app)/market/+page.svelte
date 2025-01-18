@@ -37,47 +37,22 @@
     { id: "pantry", name: "Pantry Staples", icon: Package },
   ];
 
-  const groceryItems = [
-    {
-      id: 1,
-      name: "Organic Fresh Bananas",
-      price: 2.99,
-      originalPrice: 3.99,
-      category: "Fruits",
-      rating: 4.5,
-      reviews: 128,
-      image:
-        "https://plus.unsplash.com/premium_photo-1664527307725-362b589c406d?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      badge: "SALE",
-      primeDelivery: true,
-    },
-    {
-      id: 2,
-      name: "Grass-Fed Organic Milk",
-      price: 4.99,
-      category: "Dairy",
-      rating: 4.8,
-      reviews: 256,
-      image:
-        "https://images.unsplash.com/photo-1523473827533-2a64d0d36748?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      primeDelivery: true,
-    },
-    {
-      id: 3,
-      name: "Artisan Whole Grain Bread",
-      price: 3.49,
-      category: "Bakery",
-      rating: 4.3,
-      reviews: 89,
-      image:
-        "https://plus.unsplash.com/premium_photo-1664640733898-d5c3f71f44e1?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      badge: "FRESH",
-      primeDelivery: true,
-    },
-  ];
+  const images: {
+    [key: string]: string;
+  } = {
+    Banana:
+      "https://plus.unsplash.com/premium_photo-1664527307725-362b589c406d?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    Apple:
+      "https://plus.unsplash.com/premium_photo-1667049292983-d2524dd0ef08?q=80&w=1749&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    Milk: "https://images.unsplash.com/photo-1523473827533-2a64d0d36748?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    Bread:
+      "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1772&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  };
 
   let selectedCategory = "all";
-  let cartCount = 0;
+  let cartCount = $state(0);
+
+  let { data } = $props();
 </script>
 
 <div class="container mx-auto max-w-7xl p-4">
@@ -112,82 +87,74 @@
         <Tabs.List class="inline-flex w-full gap-2 border-b">
           {#each categories as category}
             <Tabs.Trigger value={category.id} class="p-2 px-4 text-sm font-medium">
-              <svelte:component this={category.icon} class="h-4 w-4 md:mr-2" />
+              <category.icon class="h-4 w-4 md:mr-2" />
               <span class="hidden md:inline">{category.name}</span>
             </Tabs.Trigger>
           {/each}
         </Tabs.List>
-      </Tabs.Root>
-
-      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {#each groceryItems as item}
-          <Card
-            class="group relative overflow-hidden border-0 bg-white/90 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl"
-          >
-            {#if item.badge}
-              <span
-                class="absolute left-4 top-4 z-10 rounded-md bg-primary/90 px-4 py-1.5 text-xs font-medium text-primary-foreground backdrop-blur-sm"
+        <Tabs.Content value="all">
+          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {#each data.items.res as item}
+              <Card
+                class="group relative overflow-hidden border-0 bg-white/90 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl"
               >
-                {item.badge}
-              </span>
-            {/if}
-            <CardHeader class="p-6">
-              <div class="relative overflow-hidden rounded-xl">
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  class="h-56 w-full object-cover transition-all duration-500 group-hover:scale-110"
-                />
-                <Button
-                  variant="secondary"
-                  size="icon"
-                  class="absolute right-3 top-3 bg-white/80 opacity-0 backdrop-blur-sm transition-all duration-300 hover:bg-white group-hover:opacity-100"
+                <span
+                  class="absolute left-4 top-4 z-10 rounded-md bg-primary/90 px-4 py-1.5 text-xs font-medium text-primary-foreground backdrop-blur-sm"
                 >
-                  <Heart class="h-4 w-4" />
-                </Button>
-              </div>
-              <CardTitle class="mt-6 line-clamp-1 text-xl font-semibold tracking-tight"
-                >{item.name}</CardTitle
-              >
-              <CardDescription class="mt-3 flex items-center space-x-1">
-                {#each Array(5) as _, i}
-                  <Star
-                    class="h-4 w-4 text-yellow-400"
-                    fill={i < Math.floor(item.rating) ? "currentColor" : "none"}
-                  />
-                {/each}
-                <span class="ml-2 text-sm font-medium text-muted-foreground">({item.reviews})</span>
-              </CardDescription>
-            </CardHeader>
-            <CardContent class="px-6 pt-0">
-              <div class="flex items-baseline gap-4">
-                <p class="text-2xl font-bold tracking-tight text-primary/50">${item.price}</p>
-                {#if item.originalPrice}
-                  <p class="text-sm font-medium text-muted-foreground line-through">
-                    ${item.originalPrice}
+                  Fresh
+                </span>
+                <CardHeader class="p-6">
+                  <div class="relative overflow-hidden rounded-xl">
+                    <img
+                      src={images[item.name]}
+                      alt={item.name}
+                      class="h-56 w-full object-cover transition-all duration-500 group-hover:scale-110"
+                    />
+                    <Button
+                      variant="secondary"
+                      size="icon"
+                      class="absolute right-3 top-3 bg-white/80 opacity-0 backdrop-blur-sm transition-all duration-300 hover:bg-white group-hover:opacity-100"
+                    >
+                      <Heart class="h-4 w-4" />
+                    </Button>
+                  </div>
+                  <CardTitle class="mt-6 line-clamp-1 text-xl font-semibold tracking-tight"
+                    >{item.name}</CardTitle
+                  >
+                  <CardDescription class="mt-3 flex items-center space-x-1">
+                    {#each Array(5) as _, i}
+                      <Star class="h-4 w-4 text-yellow-400" fill="currentColor" />
+                    {/each}
+                    <!-- <span class="ml-2 text-sm font-medium text-muted-foreground"
+                    >({item.reviews})</span
+                  > -->
+                  </CardDescription>
+                </CardHeader>
+                <CardContent class="px-6 pt-0">
+                  <div class="flex items-baseline gap-4">
+                    <p class="text-2xl font-bold tracking-tight text-primary/50">₹{item.price}</p>
+                    <p class="text-sm font-medium text-muted-foreground line-through">₹110</p>
+                  </div>
+                  <p class="mt-3 flex items-center text-sm font-medium text-primary/90">
+                    <Package class="mr-2 h-4 w-4" />
+                    Prime Delivery
                   </p>
-                {/if}
-              </div>
-              {#if item.primeDelivery}
-                <p class="mt-3 flex items-center text-sm font-medium text-primary/90">
-                  <Package class="mr-2 h-4 w-4" />
-                  Prime Delivery
-                </p>
-              {/if}
-            </CardContent>
-            <CardFooter class="p-6 pt-4">
-              <Button
-                size="default"
-                class="w-full bg-primary/90 transition-colors hover:bg-primary"
-                onclick={() => cartCount++}
-              >
-                <ShoppingCart class="mr-2.5 h-4 w-4" />
-                Add to Cart
-              </Button>
-            </CardFooter>
-          </Card>
-        {/each}
-      </div>
+                </CardContent>
+                <CardFooter class="p-6 pt-4">
+                  <Button
+                    size="default"
+                    class="w-full bg-primary/90 transition-colors hover:bg-primary"
+                    onclick={() => cartCount++}
+                  >
+                    <ShoppingCart class="mr-2.5 h-4 w-4" />
+                    Add to Cart
+                  </Button>
+                </CardFooter>
+              </Card>
+            {/each}
+          </div>
+        </Tabs.Content>
+      </Tabs.Root>
     </div>
   </ScrollArea>
 </div>

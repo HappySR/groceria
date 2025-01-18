@@ -19,5 +19,5 @@ try {
   console.log("[?] New item:\n", item);
   exit(0);
 } catch (e) {
-  console.error("[!] Error setting user as admin:\n", e);
+  console.error("[!] Error adding item:\n", e);
 }
