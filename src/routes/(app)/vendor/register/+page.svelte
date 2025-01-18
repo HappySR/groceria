@@ -1,9 +1,9 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
   import { Input } from "$lib/components/ui/input";
   import { Button } from "$lib/components/ui/button";
   import { ScrollArea } from "$lib/components/ui/scroll-area";
   import { Card, CardContent, CardFooter, CardTitle } from "$lib/components/ui/card";
-  import { ChevronRight } from "lucide-svelte";
 
   let vendorName = "";
   let vendorAge = 18;
@@ -45,18 +45,8 @@
     !opensAt ||
     !closesAt ||
     description.length < 10;
-
-  function handleClick(event: MouseEvent) {
-    if (isDisabled) {
-      event.preventDefault(); // Prevent navigation if the button is disabled
-      alert("Please fill out all required fields to proceed.");
-    } else {
-      console.log("Proceeding to ./market");
-      // Navigation will happen automatically due to the href if not disabled
-    }
-  }
-
-  const validateEmail = () => {
+    
+    const validateEmail = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     isValidEmail = emailRegex.test(email);
   };
@@ -152,6 +142,7 @@
       twitterLink,
       websiteLink,
     });
+    goto("./vendor-dashboard");
   };
 
   const validateProductForm = (): boolean => {
@@ -185,16 +176,6 @@
   <!-- Header -->
   <div class="flex flex-col items-start space-y-4">
     <h1 class="pb-4 text-3xl font-extrabold leading-tight text-green-600 md:text-5xl">groceria.</h1>
-    <a
-      href="./market"
-      onclick={handleClick}
-      class="group fixed right-4 top-4 flex items-center justify-center space-x-2 rounded-lg px-6 py-3 text-lg font-semibold text-green-600 shadow-md transition duration-200 focus:outline-none"
-      aria-disabled={isDisabled}
-      title="Skip directly to vendor dashboard"
-    >
-      <ChevronRight class="h-5 w-5" />
-    </a>
-
     <p class="mb-8 mt-4 max-w-full rounded-lg bg-gray-50 px-4 py-2 text-xl text-gray-600 shadow-md">
       Welcome to groceria! Please fill out the form below to register your vendor details. This
       information will help us serve you better.
@@ -532,104 +513,6 @@
             Submit
           </Button>
         </form>
-      {/if}
-
-      <!-- Add Product and Added Products Section -->
-      {#if isSubmitted}
-        <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
-          <!-- Add New Product -->
-          <div>
-            <Card class="shadow-md">
-              <CardTitle class="pl-5 pt-4 text-xl font-semibold text-gray-800"
-                >Add New Product</CardTitle
-              >
-              <CardContent>
-                <div class="space-y-4">
-                  <!-- Product Name -->
-                  <div>
-                    <label for="productName" class="block text-sm font-medium text-gray-700">
-                      Product Name
-                    </label>
-                    <Input
-                      id="productName"
-                      bind:value={productName}
-                      class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-green-500"
-                      placeholder="Enter Product Name"
-                    />
-                    {#if productNameError}
-                      <span class="text-sm text-red-500">{productNameError}</span>
-                    {/if}
-                  </div>
-
-                  <!-- Product Category -->
-                  <div>
-                    <label for="productCategory" class="block text-sm font-medium text-gray-700">
-                      Category
-                    </label>
-                    <select
-                      id="productCategory"
-                      bind:value={productCategory}
-                      class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-green-500"
-                    >
-                      {#each selectedCategories.filter((category) => category !== "All Products") as category}
-                        <option value={category}>{category}</option>
-                      {/each}
-                    </select>
-                    {#if productCategoryError}
-                      <span class="text-sm text-red-500">{productCategoryError}</span>
-                    {/if}
-                  </div>
-
-                  <!-- Product Price -->
-                  <div>
-                    <label for="productPrice" class="block text-sm font-medium text-gray-700">
-                      Price
-                    </label>
-                    <Input
-                      id="productPrice"
-                      type="number"
-                      bind:value={productPrice}
-                      class="mt-2 block w-full rounded-lg border border-gray-300 p-3 focus:ring-2 focus:ring-green-500"
-                      placeholder="Enter Price"
-                    />
-                    {#if productPriceError}
-                      <span class="text-sm text-red-500">{productPriceError}</span>
-                    {/if}
-                  </div>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button
-                  class="w-full rounded-lg bg-green-600 py-3 font-medium text-white hover:bg-green-700"
-                  onclick={addProduct}
-                >
-                  Add Product
-                </Button>
-              </CardFooter>
-            </Card>
-          </div>
-
-          <!-- Added Products -->
-          <div>
-            <div class="rounded-lg bg-gray-50 p-6 shadow-lg">
-              <h3 class="text-xl font-semibold text-gray-800">Added Products</h3>
-              <ul class="mt-4 space-y-4">
-                {#each products as product, i}
-                  <li class="flex justify-between rounded-lg border p-4 shadow-sm">
-                    <div>
-                      <div class="font-semibold">{product.name}</div>
-                      <div class="text-sm text-gray-600">Category: {product.category}</div>
-                      <div class="text-sm text-gray-600">Price: ₹{product.price}</div>
-                    </div>
-                  </li>
-                {/each}
-              </ul>
-              {#if products.length === 0}
-                <p class="mt-4 text-center text-gray-600">No products added yet.</p>
-              {/if}
-            </div>
-          </div>
-        </div>
       {/if}
     </div>
   </div>
