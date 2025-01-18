@@ -16,7 +16,7 @@
   </script>
   
   <svelte:head>
-    <title>Admin | groceria.</title>
+    <title>Vendor | groceria.</title>
   </svelte:head>
   
   <Toaster />
