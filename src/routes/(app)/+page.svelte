@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Input } from "$lib/components/ui/input";
   import { Button } from "$lib/components/ui/button";
+  import Footer from "$lib/components/custom/Footer.svelte";
   import { ArrowRight, Search, ShoppingCart, Truck, Leaf, Star } from "lucide-svelte";
 
   type Testimonial = {
@@ -237,3 +238,5 @@
     </div>
   </section>
 </div>
+
+<Footer />
