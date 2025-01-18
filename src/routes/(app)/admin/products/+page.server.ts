@@ -3,7 +3,7 @@ import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ locals, fetch }) => {
   if (!locals.session || locals.user!.role !== "admin") {
-    return redirect(302, "/market");
+    return redirect(302, "/sign-in");
   }
 
   const body = await fetch("/api/category/list", {

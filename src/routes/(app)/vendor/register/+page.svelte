@@ -45,8 +45,8 @@
     !opensAt ||
     !closesAt ||
     description.length < 10;
-    
-    const validateEmail = () => {
+
+  const validateEmail = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     isValidEmail = emailRegex.test(email);
   };
