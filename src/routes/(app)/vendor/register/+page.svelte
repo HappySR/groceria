@@ -3,20 +3,14 @@
   import { Input } from "$lib/components/ui/input";
   import { Button } from "$lib/components/ui/button";
   import { ScrollArea } from "$lib/components/ui/scroll-area";
-  import { Card, CardContent, CardFooter, CardTitle } from "$lib/components/ui/card";
+
+  export let data;
 
   let vendorName = "";
   let vendorAge = 18;
   let selectedCategories: string[] = [];
   let acknowledge = false;
   let isSubmitted = false;
-  let products: { id: number; name: string; category: string; price: number }[] = [];
-  let productName = "";
-  let productCategory = "";
-  let productPrice = 0;
-  let productNameError = "";
-  let productCategoryError = "";
-  let productPriceError = "";
   let dropdownOpenCategories = false;
   let dropdownOpenDays = false;
   let description = "";
@@ -53,12 +47,7 @@
 
   const categories = [
     "All Products",
-    "Fresh Fruits",
-    "Vegetables",
-    "Dairy & Eggs",
-    "Meat & Seafood",
-    "Bakery",
-    "Pantry Staples",
+    ...data.categories.map((cat) => cat.name).filter((name) => name && name !== "All Products"),
   ];
 
   const weekdaysOptions = [
@@ -144,56 +133,23 @@
     });
     goto("./vendor-dashboard");
   };
-
-  const validateProductForm = (): boolean => {
-    productNameError = productName.trim() === "" ? "Product name is required." : "";
-    productCategoryError = productCategory === "" ? "Category is required." : "";
-    productPriceError = productPrice <= 0 ? "Price must be a positive number." : "";
-
-    return !productNameError && !productCategoryError && !productPriceError;
-  };
-
-  const addProduct = () => {
-    if (validateProductForm()) {
-      const newProduct = {
-        id: products.length + 1,
-        name: productName,
-        category: productCategory,
-        price: productPrice,
-      };
-
-      products = [...products, newProduct];
-
-      // Reset the form fields after adding the product
-      productName = "";
-      productCategory = "";
-      productPrice = 0;
-    }
-  };
 </script>
 
 <div class="container mx-auto max-w-7xl px-4 pt-8">
   <!-- Header -->
   <div class="flex flex-col items-start space-y-4">
     <h1 class="pb-4 text-3xl font-extrabold leading-tight text-green-600 md:text-5xl">groceria.</h1>
-    <p class="mb-8 mt-4 max-w-full rounded-lg bg-gray-50 px-4 py-2 text-xl text-gray-600 shadow-md">
-      Welcome to groceria! Please fill out the form below to register your vendor details. This
-      information will help us serve you better.
-    </p>
-    <div class="w-full border-b-2 border-gray-300"></div>
-    <!-- Subtle line divider -->
   </div>
 </div>
 
 <!-- Main Content -->
 <ScrollArea class="h-[calc(100vh-4rem)] overflow-hidden py-5">
-  <div class="mx-auto max-w-7xl">
-    <div class="rounded-lg bg-white p-8 shadow-lg">
-      <!-- Vendor Form -->
+  <div class="mx-auto max-w-7xl px-4">
+    <div class="rounded-lg bg-white p-4 shadow-lg md:p-8">
       {#if !isSubmitted}
-        <form onsubmit={submitForm} class="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <form onsubmit={submitForm} class="grid grid-cols-1 gap-4 md:grid-cols-12 md:gap-6">
           <!-- Vendor Name -->
-          <div>
+          <div class="md:col-span-6">
             <label for="vendorName" class="block text-lg font-medium text-gray-700">
               Vendor Name
             </label>
@@ -207,7 +163,7 @@
           </div>
 
           <!-- Vendor Age -->
-          <div>
+          <div class="md:col-span-6">
             <label for="vendorAge" class="block text-lg font-medium text-gray-700">
               Vendor Age
             </label>
@@ -225,7 +181,7 @@
           </div>
 
           <!-- Select Categories -->
-          <div class="col-span-2">
+          <div class="md:col-span-12">
             <label for="categories" class="block text-lg font-medium text-gray-700">
               Select Categories
             </label>
@@ -253,7 +209,6 @@
                       Select Categories...
                     {/if}
                   </div>
-                  <!-- Down Arrow (Toggle Icon) -->
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="h-4 w-4 transition-transform duration-200"
@@ -296,7 +251,7 @@
           </div>
 
           <!-- Description -->
-          <div class="col-span-2">
+          <div class="md:col-span-12">
             <label for="description" class="block text-lg font-medium text-gray-700">
               Description
             </label>
@@ -315,7 +270,7 @@
           </div>
 
           <!-- Address -->
-          <div class="col-span-2">
+          <div class="md:col-span-12">
             <label for="address" class="block text-lg font-medium text-gray-700"> Address </label>
             <Input
               id="address"
@@ -328,7 +283,7 @@
           </div>
 
           <!-- Phone -->
-          <div class="col-span-2">
+          <div class="md:col-span-6">
             <label for="phone" class="block text-lg font-medium text-gray-700">Phone</label>
             <Input
               id="phone"
@@ -346,7 +301,7 @@
           </div>
 
           <!-- Email -->
-          <div class="col-span-2">
+          <div class="md:col-span-6">
             <label for="email" class="block text-lg font-medium text-gray-700"> Email </label>
             <Input
               id="email"
@@ -363,7 +318,7 @@
           </div>
 
           <!-- Opens At -->
-          <div class="col-span-2">
+          <div class="md:col-span-6">
             <label for="opensAt" class="block text-lg font-medium text-gray-700"> Opens At </label>
             <Input
               id="opensAt"
@@ -375,7 +330,7 @@
           </div>
 
           <!-- Closes At -->
-          <div class="col-span-2">
+          <div class="md:col-span-6">
             <label for="closesAt" class="block text-lg font-medium text-gray-700">
               Closes At
             </label>
@@ -389,7 +344,7 @@
           </div>
 
           <!-- Weekdays (Dropdown with multi-select checkboxes) -->
-          <div class="col-span-2">
+          <div class="md:col-span-12">
             <label for="weekdays" class="block text-lg font-medium text-gray-700">
               Weekdays (Select days when the shop is open)
             </label>
@@ -457,11 +412,11 @@
           </div>
 
           <!-- Social Media Links (Optional) -->
-          <div class="col-span-2">
+          <div class="md:col-span-12">
             <label for="socialMedia" class="block text-lg font-medium text-gray-700">
               Social Media Links (Optional)
             </label>
-            <div class="space-y-4">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
               <Input
                 id="facebookLink"
                 placeholder="Facebook Link"
@@ -490,7 +445,7 @@
           </div>
 
           <!-- Acknowledge Checkbox -->
-          <div class="col-span-2">
+          <div class="md:col-span-12">
             <div class="flex items-center">
               <input
                 id="acknowledge"
@@ -507,7 +462,7 @@
           <!-- Submit Button -->
           <Button
             type="submit"
-            class="col-span-2 w-full rounded-lg bg-green-600 py-3 font-medium text-white hover:bg-green-700"
+            class="w-full rounded-lg bg-green-600 py-3 font-medium text-white hover:bg-green-700 md:col-span-12"
             disabled={isDisabled}
           >
             Submit
