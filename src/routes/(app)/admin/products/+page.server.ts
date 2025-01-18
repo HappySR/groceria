@@ -6,8 +6,23 @@ export const load: PageServerLoad = async ({ locals, fetch }) => {
     return redirect(302, "/market");
   }
 
+  const body = await fetch("/api/category/list", {
+    method: "GET",
+  });
+  const response = await body.json();
+
   return {
     user: locals.user!,
     session: locals.session!,
+    categories: response.res as {
+      id: string;
+      name: string;
+      createdAt: Date;
+      description: string;
+      userId: string;
+      properties: {
+        [key: string]: string;
+      };
+    }[],
   };
 };
