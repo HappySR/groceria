@@ -74,17 +74,23 @@
         <!-- Sign Up Button -->
         <button
           onclick={() => handleRedirect("./sign-up")}
-          class="w-3/4 transform rounded-full bg-gradient-to-r from-lime-300 to-green-500 px-8 py-4 text-lg font-semibold shadow-xl transition-all hover:scale-110 hover:from-lime-200 hover:to-green-400 sm:w-auto"
+          class="w-3/4 transform rounded-full bg-gradient-to-r from-lime-300 to-green-500 px-8 py-4 text-lg font-semibold shadow-lg transition-all duration-300 ease-in-out hover:scale-110 hover:from-lime-200 hover:to-green-400 sm:w-auto"
         >
-          Sign Up <ArrowRight class="ml-2 inline-block" />
+          Sign Up
+          <ArrowRight
+            class="ml-2 inline-block transition-all duration-300 ease-in-out group-hover:translate-x-2"
+          />
         </button>
 
         <!-- Register as Vendor Button -->
         <button
           onclick={() => handleRedirect("./vendor/register")}
-          class="mt-4 w-3/4 transform rounded-full bg-gradient-to-r from-lime-300 to-green-500 px-8 py-4 text-lg font-semibold shadow-xl transition-all hover:scale-110 hover:from-lime-200 hover:to-green-400 sm:mt-0 sm:w-auto"
+          class="mt-4 w-3/4 transform rounded-full bg-gradient-to-r from-lime-300 to-green-500 px-8 py-4 text-lg font-semibold shadow-lg transition-all duration-300 ease-in-out hover:scale-110 hover:from-lime-200 hover:to-green-400 sm:mt-0 sm:w-auto"
         >
-          Register as Vendor <ArrowRight class="ml-2 inline-block" />
+          Register as Vendor
+          <ArrowRight
+            class="ml-2 inline-block transition-all duration-300 ease-in-out group-hover:translate-x-2"
+          />
         </button>
       </div>
     </div>
