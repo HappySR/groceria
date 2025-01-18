@@ -70,7 +70,7 @@
       </div>
 
       <!-- Action Buttons -->
-      <div class="flex flex-col justify-center gap-6 sm:flex-row sm:gap-8">
+      <div class="flex flex-col items-center justify-center gap-6 sm:flex-row sm:gap-8">
         <!-- Sign Up Button -->
         <button
           onclick={() => handleRedirect("./sign-up")}
