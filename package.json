@@ -44,6 +44,7 @@
     "svelte": "^5.0.0",
     "svelte-check": "^4.0.0",
     "svelte-sonner": "^0.3.28",
+    "svg": "link:@svelte-put/qr/svg",
     "tailwind-merge": "^2.6.0",
     "tailwind-variants": "^0.3.0",
     "tailwindcss": "^3.4.17",
@@ -57,6 +58,7 @@
   "dependencies": {
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
+    "@svelte-put/qr": "^2.1.0",
     "drizzle-orm": "^0.38.4",
     "postgres": "^3.4.5"
   }
