@@ -84,7 +84,7 @@
 
         <!-- Register as Vendor Button -->
         <button
-          onclick={() => handleRedirect("./vendor/register")}
+          onclick={() => handleRedirect("./sign-up")}
           class="mt-4 w-3/4 transform rounded-full bg-gradient-to-r from-lime-300 to-green-500 px-8 py-4 text-lg font-semibold shadow-lg transition-all duration-300 ease-in-out hover:scale-110 hover:from-lime-200 hover:to-green-400 sm:mt-0 sm:w-auto"
         >
           Register as Vendor
