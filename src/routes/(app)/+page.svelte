@@ -8,8 +8,8 @@
     avatar: string;
   };
 
-  const handleRedirect = (): void => {
-    goto("./sign-up");
+  const handleRedirect = (link: string): void => {
+    goto(link);
   };
 
   const testimonials: Testimonial[] = [
@@ -60,13 +60,30 @@
       <p class="mb-8 text-lg text-gray-100 sm:text-xl md:text-2xl">
         Revolutionizing the way you shop for groceries. Fresh, affordable, and delivered fast!
       </p>
-      <button
-        onclick={handleRedirect}
-        class="flex transform items-center mx-auto rounded-full bg-gradient-to-r from-lime-300 to-green-500 px-8 py-4 text-lg font-semibold shadow-xl transition-all hover:scale-110 hover:from-lime-200 hover:to-green-400"
-      >
-        <span>Try Now</span>
-        <ArrowRight class="ml-2 h-6 w-6" />
-      </button>
+      <!-- Search Bar -->
+      <div class="mb-8 flex justify-center">
+        <input
+          type="text"
+          placeholder="Search for groceries..."
+          class="w-3/4 rounded-full border-2 border-gray-300 px-6 py-3 text-lg text-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500 sm:w-1/2"
+        />
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col justify-center gap-4 sm:flex-row sm:gap-8">
+        <button
+          onclick={() => handleRedirect("./sign-up")}
+          class="transform rounded-full bg-gradient-to-r from-lime-300 to-green-500 px-8 py-4 text-lg font-semibold shadow-xl transition-all hover:scale-110 hover:from-lime-200 hover:to-green-400"
+        >
+          Sign Up <ArrowRight class="ml-2 inline-block" />
+        </button>
+        <button
+          onclick={() => handleRedirect("./sign-up")}
+          class="transform rounded-full bg-gradient-to-r from-lime-300 to-green-500 px-8 py-4 text-lg font-semibold shadow-xl transition-all hover:scale-110 hover:from-lime-200 hover:to-green-400"
+        >
+          Register as Vendor <ArrowRight class="ml-2 inline-block" />
+        </button>
+      </div>
     </div>
   </section>
 
