@@ -80,7 +80,7 @@
 <Header pathname={page.url.pathname} />
 
 <main class="grid gap-4 p-4 sm:px-6 sm:py-0">
-  <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-1">
+  <div class="grid gap-4 sm:grid-cols-1 md:grid-cols-1">
     <Card.Root>
       <Card.Header>
         <Card.Title class="text-md">
